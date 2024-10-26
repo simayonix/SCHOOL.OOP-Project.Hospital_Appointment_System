@@ -1,0 +1,111 @@
+﻿<UserControl x:Class="Hospital_Appointment_Scheduling_System_TOMAROY.Views.MainMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.ViewModels" 
+             xmlns:v="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.Views"
+             xmlns:Menu="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.Utilities"
+             xmlns:local="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1080"
+             Background="Transparent"
+             DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel.MainMenuViewModel}">
+    <Grid>
+        <Border Background="#e8d5fb"
+                CornerRadius="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0,0,0">
+                    <Border Width="40" Height="40" Padding="3" Background="White" CornerRadius="40">
+                        <Ellipse>
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="/Images/User_icon.png"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </Border>
+                    <StackPanel Margin="10,0,0,0"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <TextBlock Text="{Binding CurrentAccount.Name}"
+                                   Style="{StaticResource Text_Style1}"/>
+                        <TextBlock Text="{Binding AccountType}"/>
+                    </StackPanel>
+                </StackPanel>
+                <TextBlock VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Text="Lorem Ipsum Hospital"
+                           Style="{StaticResource Text_Style1}"/>
+                <Menu:Btn Style="{StaticResource RndBtnStyle}"
+                          Command="{Binding LogoutCommand}"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Right"
+                          Margin="0,0,60,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Logout"
+                                   Style="{StaticResource Text_Style1}"
+                                   VerticalAlignment="Center"
+                                   Margin="10,0,0,0"/>
+                        <Border Width="40" Height="40" Padding="3" CornerRadius="40">
+                            <Ellipse>
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="/Images/Logout_Icon.png"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </Border>
+                    </StackPanel>
+                </Menu:Btn>
+                <Menu:Btn Style="{StaticResource RndBtnStyle4}"
+                          Command="{Binding ExitApplicationCommand}"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Right"
+                          Margin="0,0,10,0">
+                    <TextBlock Text="X" Style="{StaticResource Text_Style1}"/>
+                </Menu:Btn>
+                <Grid Grid.Row="1"
+                      Margin="5,0,5,0">
+                    <Border Background="#c899f6"
+                            CornerRadius="10"/>
+                    <StackPanel Grid.Row="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Top">
+                        <Menu:Btn Style="{StaticResource BtnStyle}"
+                                  Command="{Binding HomeCommand}"
+                                  IsChecked="True">
+                            <TextBlock Text="Home"
+                                       Style="{StaticResource Text_Style1}"/>
+                        </Menu:Btn>
+                        <Menu:Btn Style="{StaticResource BtnStyle}"
+                                  Command="{Binding PatientManagementCommand}">
+                            <TextBlock Text="Patients"
+                                       Style="{StaticResource Text_Style1}"/>
+                        </Menu:Btn>
+                        <Menu:Btn Style="{StaticResource BtnStyle}"
+                                  Command="{Binding DoctorManagementCommand}">
+                            <TextBlock Text="Doctors"
+                                       Style="{StaticResource Text_Style1}"/>
+                        </Menu:Btn>
+                        <Menu:Btn Style="{StaticResource BtnStyle}"
+                                  Command="{Binding AppointmentManagementCommand}">
+                            <TextBlock Text="Appointments"
+                                       Style="{StaticResource Text_Style1}"/>
+                        </Menu:Btn>
+                    </StackPanel>
+                </Grid>
+                <ContentControl Grid.Row="2"
+                                Margin="10,10,0,10"
+                                Content="{Binding CurrentView}" HorizontalAlignment="Left" Width="1060"/>
+            </Grid>
+            <!--<Button x:Name="CloseApp"
+        Style="{StaticResource ExitApp}"
+        Click="CloseApp_Click" />-->
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,219 @@
+﻿<UserControl x:Class="Hospital_Appointment_Scheduling_System_TOMAROY.Views.DoctorManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.Views" 
+             xmlns:mod="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.Models"
+             xmlns:vm="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.ViewModels"
+             xmlns:Menu="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.Utilities"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1060"
+             Style="{StaticResource Page_Style}">
+    <UserControl.DataContext>
+        <vm:DoctorManagementViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+    <Grid>
+        <Border Background="#C6B5ED" CornerRadius="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="420"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Margin="40,20,0,0">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Search:"
+                                   FontSize="18"
+                                   Style="{StaticResource Text_Style1}"/>
+                        <Grid Margin="10,0,0,0"
+                              VerticalAlignment="Center">
+                            <TextBlock Margin="12,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Text="Search in Doctors"
+                                       IsHitTestVisible="False"
+                                       Panel.ZIndex="1"
+                                       Visibility="{Binding ElementName=FilterSearch, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"/>
+                            <TextBox Name="FilterSearch"
+                                     TextChanged="FilterTextBox_TextChanged"
+                                     Height="30" 
+                                     Width="150"
+                                     Style="{StaticResource FilterBox}"/>
+                        </Grid>
+                        <Menu:Btn Style="{StaticResource AddBtnStyle}"
+                                  Command="{Binding ShowAddDoctorCommand}"
+                                  Margin="180,0,0,0"
+                                  x:Name="AddDoctor">
+                            <TextBlock Text="Add New Doctor"
+                           Style="{StaticResource Text_Style1}"/>
+                        </Menu:Btn>
+                    </StackPanel>
+                    <DataGrid Style="{DynamicResource DataGridStyle1}" 
+                              CellStyle="{DynamicResource DataGridCellStyle1}" 
+                              ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                              RowStyle="{DynamicResource DataGridRowStyle1}" 
+                              Width="560"
+                              Height="500"
+                              ItemsSource="{Binding Doctors}"
+                              SelectedItem="{Binding SelectedDoctor}"
+                              x:Name="DoctorList">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID #" IsReadOnly="True" CanUserResize="False" Width="80" Binding="{Binding ID}"/>
+                            <DataGridTemplateColumn Header="Doctor" IsReadOnly="True" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Width="15" Height="15" CornerRadius="20" Margin="0,0,5,0" Background="MediumPurple"/>
+                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Specialization" 
+                                                IsReadOnly="True" 
+                                                Width="140" 
+                                                Binding="{Binding Specialization}"/>
+                            <DataGridTextColumn Header="Appointments" 
+                                                IsReadOnly="True" 
+                                                Width="130"
+                                                Binding="{Binding ScheduledAppointments[0].AppointmentID}"/>
+                            <DataGridTemplateColumn Header="Edit/Delete" IsReadOnly="False" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type mod:Doctor}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Menu:Btn Style="{StaticResource RndBtnStyle3}"
+                                                      Command="{Binding DataContext.ShowEditDoctorCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                      CommandParameter="{Binding}"
+                                                      IsChecked="{Binding DataContext.IsEditButtonChecked, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                      x:Name="EditButton">
+                                                <Image Source="/Images/Edit_Icon.png"/>
+                                            </Menu:Btn>
+                                            <Menu:Btn Style="{StaticResource RndBtnStyle3}"
+                                                      Command="{Binding DataContext.RemoveDoctorCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                      CommandParameter="{Binding}"
+                                                      Margin="5,0,0,0">
+                                                <Image Source="/Images/Remove_Icon.png"/>
+                                            </Menu:Btn>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <TextBlock Text="Doctor Information" 
+                           Grid.Column="1"
+                           Width="270"
+                           Height="50"
+                           Visibility="{Binding IsDoctorInformationVisible, Converter={StaticResource BoolToVis}}"
+                           Style="{StaticResource Text_Style4}"/>
+                <Border Grid.Column="1"
+                        Visibility="{Binding IsDoctorInformationVisible, Converter={StaticResource BoolToVis}}"
+                        Background="#e8d5fb"
+                        Width="370"
+                        CornerRadius="10"
+                        Style="{StaticResource BorderStyle}" Margin="0,75,0,30">
+                    <Grid Margin="20,0,20,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="400"/>
+                        </Grid.RowDefinitions>
+                        <Border Width="70" Height="70"
+                                Padding="3" Background="White" CornerRadius="40">
+                            <Ellipse>
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="/Images/User_icon.png"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </Border>
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="ID #:" Grid.Row="0" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding SelectedDoctor.ID,UpdateSourceTrigger=PropertyChanged}" 
+                                     Grid.Row="0" Margin="80,0,10,0" 
+                                     FontSize="20"
+                                     Style="{StaticResource InformationBox}"/>
+                            <TextBlock Text="Name:" Grid.Row="1" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding SelectedDoctor.Name,UpdateSourceTrigger=PropertyChanged}" 
+                                     Grid.Row="1" Margin="80,0,10,0" 
+                                     FontSize="20"
+                                     Style="{StaticResource InformationBox}"/>
+                            <TextBlock Text="Specialization:" Grid.Row="2" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding SelectedDoctor.Specialization, UpdateSourceTrigger=PropertyChanged}" 
+                                     Grid.Row="2" Margin="180,0,10,0"
+                                     FontSize="20"
+                                     Style="{StaticResource InformationBox}"/>
+                            <TextBlock Text="Appointments:" 
+                                       Grid.Row="3" Margin="10,15,0,0"
+                                       VerticalAlignment="Top"
+                                       Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding Appointments}"
+                                     TextWrapping="Wrap"
+                                     Grid.Row="3" Margin="0,50,0,0"
+                                     FontSize="15" VerticalContentAlignment="Top"
+                                     VerticalAlignment="Top" HorizontalAlignment="Center"
+                                     Width="310" Height="140"
+                                     Style="{StaticResource InformationBox}"/>
+                            <Menu:Btn Grid.Row="3"
+                                      Style="{StaticResource SaveBtnStyle}"
+                                      Command="{Binding SaveEditCommand}"
+                                      x:Name="SaveButton">
+                                <TextBlock Text="Save" Style="{StaticResource Text_Style1}"/>
+                            </Menu:Btn>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <Border Grid.Column="1"
+                        Visibility="{Binding IsAddDoctorPanelVisible, Converter={StaticResource BoolToVis}}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,70,0,0"
+                        Width="400"
+                        Height="320"
+                        CornerRadius="10,0,0,10"
+                        Background="#f4ecfd"
+                        Style="{StaticResource BorderStyle2}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                            <Menu:Btn Style="{StaticResource ExitBtnStyle}"
+                                      Command="{Binding HideAddDoctorCommand}"
+                                      x:Name="ExitButton">
+                                <TextBlock Text="X" Style="{StaticResource Text_Style1}"/>
+                            </Menu:Btn>
+                            <TextBlock Text="Add New Doctor" Style="{StaticResource Text_Style3}"
+                                       Margin="70,0,0,0"/>
+                        </StackPanel>
+                        <Grid Margin="30,5,0,20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Name:" Grid.Row="0" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding Name}" Style="{StaticResource NewObjectBox}"
+                                     Grid.Row="0" Margin="80,0,40,0"
+                                     FontSize="20"/>
+                            <TextBlock Text="Specialization:" Grid.Row="1" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding Specialization}" Style="{StaticResource NewObjectBox}"
+                                     Grid.Row="1" Margin="155,0,40,0"
+                                     FontSize="20"/>
+                        </Grid>
+                        <Menu:Btn Style="{StaticResource RndBtnStyle}"
+                                  Command="{Binding AddDoctorCommand}"
+                                  x:Name="AddDoctorButton">
+                            <TextBlock Text="Add Doctor" Style="{StaticResource Text_Style1}"/>
+                        </Menu:Btn>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

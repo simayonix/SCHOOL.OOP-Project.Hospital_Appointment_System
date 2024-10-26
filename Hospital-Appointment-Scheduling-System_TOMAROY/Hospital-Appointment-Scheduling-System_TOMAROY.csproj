@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <RootNamespace>Hospital_Appointment_Scheduling_System_TOMAROY</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Fonts\Juma.ttf" />
+    <None Remove="Images\Edit_Icon.png" />
+    <None Remove="Images\Home_page.png" />
+    <None Remove="Images\Logout_Icon.png" />
+    <None Remove="Images\Remove_Icon.png" />
+    <None Remove="Images\User_Icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\Juma.ttf" />
+    <Resource Include="Images\Edit_Icon.png" />
+    <Resource Include="Images\Home_page.png" />
+    <Resource Include="Images\Logout_Icon.png" />
+    <Resource Include="Images\Remove_Icon.png" />
+    <Resource Include="Images\User_Icon.png" />
+  </ItemGroup>
+
+</Project>

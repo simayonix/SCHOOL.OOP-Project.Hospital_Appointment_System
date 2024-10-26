@@ -1,0 +1,226 @@
+﻿<UserControl x:Class="Hospital_Appointment_Scheduling_System_TOMAROY.Views.AppointmentManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.Views"
+             xmlns:mod="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.Models"
+             xmlns:vm="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.ViewModels"
+             xmlns:Menu="clr-namespace:Hospital_Appointment_Scheduling_System_TOMAROY.Utilities"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1060"
+             Style="{StaticResource Page_Style}">
+    <UserControl.DataContext>
+        <vm:AppointmentManagementViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+    <Grid>
+        <Border Background="#C6B5ED" CornerRadius="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="420"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Margin="40,20,0,0">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <TextBlock Text="Search:" FontSize="18"
+                                   Margin="0,0,0,10"
+                                   Style="{StaticResource Text_Style1}"/>
+                        <Grid Margin="10,0,0,10"
+                              VerticalAlignment="Center">
+                            <TextBlock Margin="12,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Text="Search in Appointments"
+                                       IsHitTestVisible="False"
+                                       Panel.ZIndex="1"
+                                       Visibility="{Binding ElementName=FilterSearch, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"/>
+                            <TextBox Name="FilterSearch"
+                                     TextChanged="FilterTextBox_TextChanged"
+                                     Height="30" Width="150"
+                                     Style="{StaticResource FilterBox}"/>
+                        </Grid>
+                        <Menu:Btn Margin="150,0,0,0" Style="{StaticResource ShowAppointmentsStyle}"
+                                  Command="{Binding ShowNewAppointmentCommand}">
+                            <TextBlock Text="New Appointments" Style="{StaticResource Text_Style1}"/>
+                        </Menu:Btn>
+                        <Menu:Btn Margin="10,0,0,0" Style="{StaticResource ExitBtnStyl2}" Command="{Binding HideNewAppointmentCommand}">
+                            <TextBlock Text="X" Style="{StaticResource Text_Style1}"/>
+                        </Menu:Btn>
+                    </StackPanel>
+                    <DataGrid Style="{DynamicResource DataGridStyle1}" 
+                              CellStyle="{DynamicResource DataGridCellStyle1}" 
+                              ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                              RowStyle="{DynamicResource DataGridRowStyle1}" 
+                              Width="560"
+                              Height="500"
+                              Visibility="{Binding IsAppointmentsVisible, Converter={StaticResource BoolToVis}}"
+                              ItemsSource="{Binding Appointments}"
+                              SelectedItem="{Binding SelectedAppointment}"
+                              x:Name="DoctorList">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID #" IsReadOnly="True" CanUserResize="False" Width="80" Binding="{Binding AppointmentID}"/>
+                            <DataGridTextColumn Header="Patient" 
+                                                IsReadOnly="True" 
+                                                Width="75"
+                                                Binding="{Binding Patient.Name}"/>
+                            <DataGridTextColumn Header="Doctor" 
+                                                IsReadOnly="True" 
+                                                Width="75" 
+                                                Binding="{Binding Doctor.Name}"/>
+                            <DataGridTextColumn Header="Date" 
+                                                IsReadOnly="True" 
+                                                Width="80"
+                                                Binding="{Binding Date}"/>
+                            <DataGridTextColumn Header="Time" 
+                                                IsReadOnly="True" 
+                                                Width="70"
+                                                Binding="{Binding Time}"/>
+                            <DataGridTextColumn Header="Status" 
+                                                IsReadOnly="True" 
+                                                Width="80"
+                                                Binding="{Binding Status}"/>
+                            <DataGridTemplateColumn Header="Edit/Delete" IsReadOnly="False" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate DataType="{x:Type mod:Appointment}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Menu:Btn Style="{StaticResource RndBtnStyle3}"
+                                                      Command="{Binding DataContext.ApproveAppointmentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                      CommandParameter="{Binding}"
+                                                      x:Name="EditButton">
+                                                <Image Source="/Images/Edit_Icon.png"/>
+                                            </Menu:Btn>
+                                            <Menu:Btn Style="{StaticResource RndBtnStyle3}"
+                                                      Command="{Binding DataContext.DenyAppointmentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                      CommandParameter="{Binding}"
+                                                      Margin="5,0,0,0">
+                                                <Image Source="/Images/Remove_Icon.png"/>
+                                            </Menu:Btn>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid Style="{DynamicResource DataGridStyle1}" 
+                              CellStyle="{DynamicResource DataGridCellStyle1}" 
+                              ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                              RowStyle="{DynamicResource DataGridRowStyle1}" 
+                              Width="560"
+                              Height="500"
+                              Visibility="{Binding IsNewAppointmentsVisible, Converter={StaticResource BoolToVis}}"
+                              ItemsSource="{Binding TemporaryAppointments}"
+                              SelectedItem="{Binding SelectedNewAppointment}"
+                              x:Name="NewAppointmentList">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID #" IsReadOnly="True" CanUserResize="False" Width="80" Binding="{Binding AppointmentID}"/>
+                            <DataGridTextColumn Header="Patient" 
+                                                IsReadOnly="True" 
+                                                Width="75"
+                                                Binding="{Binding Patient.Name}"/>
+                            <DataGridTextColumn Header="Doctor" 
+                                                IsReadOnly="True" 
+                                                Width="75" 
+                                                Binding="{Binding Doctor.Name}"/>
+                            <DataGridTextColumn Header="Date" 
+                                                IsReadOnly="True" 
+                                                Width="80"
+                                                Binding="{Binding Date}"/>
+                            <DataGridTextColumn Header="Time" 
+                                                IsReadOnly="True" 
+                                                Width="70"
+                                                Binding="{Binding Time}"/>
+                            <DataGridTextColumn Header="Status" 
+                                                IsReadOnly="True" 
+                                                Width="80"
+                                                Binding="{Binding Status}"/>
+                            <DataGridTemplateColumn Header="Approve?" IsReadOnly="False" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Menu:Btn Style="{StaticResource RndBtnStyle3}"
+                                                      Command="{Binding DataContext.ApproveAppointmentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                      CommandParameter="{Binding}"
+                                                      x:Name="EditButton">
+                                                <TextBlock Text="/" Style="{StaticResource Text_Style1}"/>
+                                            </Menu:Btn>
+                                            <Menu:Btn Style="{StaticResource RndBtnStyle3}"
+                                                      Command="{Binding DataContext.DenyAppointmentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                      CommandParameter="{Binding}"
+                                                      Margin="5,0,0,0">
+                                                <Image Source="/Images/Remove_Icon.png"/>
+                                            </Menu:Btn>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <TextBlock Text="Appointment Information" 
+                           Grid.Column="1"
+                           Width="365"
+                           Height="50"
+                           Visibility="{Binding IsAppointmentInformationVisible, Converter={StaticResource BoolToVis}}"
+                           Style="{StaticResource Text_Style4}"/>
+                <Border Grid.Column="1"
+                        Visibility="{Binding IsAppointmentInformationVisible, Converter={StaticResource BoolToVis}}"
+                        Background="#e8d5fb"
+                        Width="370" Height="400"
+                        CornerRadius="10"
+                        Style="{StaticResource BorderStyle}" Margin="0,75,0,125">
+                    <Grid Margin="20,40,20,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="ID #:" Grid.Row="0" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding SelectedAppointment.AppointmentID,UpdateSourceTrigger=PropertyChanged}" 
+                                     Grid.Row="0" Margin="80,0,10,0" 
+                                     FontSize="20"
+                                     Style="{StaticResource InformationBox}"/>
+                            <TextBlock Text="Patient:" Grid.Row="1" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding SelectedAppointment.Patient.Name,UpdateSourceTrigger=PropertyChanged}" 
+                                     Grid.Row="1" Margin="90,0,10,0" 
+                                     FontSize="20"
+                                     Style="{StaticResource InformationBox}"/>
+                            <TextBlock Text="Doctor:" Grid.Row="2" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding SelectedAppointment.Doctor.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                     Grid.Row="2" Margin="90,0,10,0"
+                                     FontSize="20"
+                                     Style="{StaticResource InformationBox}"/>
+                            <TextBlock Text="Date:" Grid.Row="3" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding SelectedAppointment.Date, UpdateSourceTrigger=PropertyChanged}" 
+                                     Grid.Row="3" Margin="90,0,10,0"
+                                     FontSize="20"
+                                     Style="{StaticResource InformationBox}"/>
+                            <TextBlock Text="Time:" Grid.Row="4" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding SelectedAppointment.Time, UpdateSourceTrigger=PropertyChanged}" 
+                                     Grid.Row="4" Margin="90,0,10,0"
+                                     FontSize="20"
+                                     Style="{StaticResource InformationBox}"/>
+                            <TextBlock Text="Status:" Grid.Row="5" Style="{StaticResource Text_Style3}"/>
+                            <TextBox Text="{Binding SelectedAppointment.Status, UpdateSourceTrigger=PropertyChanged}" 
+                                     Grid.Row="5" Margin="90,0,10,0"
+                                     FontSize="20" ToolTip="Upcoming, Ongoing, Completed, Cancelled"
+                                     Style="{StaticResource InformationBox}"/>
+                            <Menu:Btn Grid.Row="6"
+                                      Style="{StaticResource SaveBtnStyle}"
+                                      Command="{Binding SaveEditCommand}"
+                                      x:Name="SaveButton">
+                                <TextBlock Text="Save" Style="{StaticResource Text_Style1}"/>
+                            </Menu:Btn>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
